@@ -17,16 +17,39 @@ public class SpriteSheetHelper
 	public static String run(ArrayList<String> args)
 	{
 
-		if (args.size() > 2)
-		{
-			return "More then three arguments given!";
-		}
-
-		if (args.size() < 2)
+		if (args.size() < 1)
 		{
 			return "Not enough argument given!";
 		}
 
+		ArrayList<String> toGiveArgs = new ArrayList<String>(args);
+		
+		toGiveArgs.remove(0);
+		
+		String type = args.get(0);
+		
+		if(type.equalsIgnoreCase("cmd"))
+		{
+			return loadSimple(toGiveArgs);
+		}
+		else if(type.equalsIgnoreCase("gui"))
+		{
+			return loadGui(toGiveArgs);
+		}
+		
+		return "\"" + type + "\" is not a valid argument!";
+		
+	}
+	
+	private static String loadGui(ArrayList<String> args)
+	{
+		
+		
+		return "none";
+	}
+	
+	private static String loadSimple(ArrayList<String> args)
+	{
 		String outName = args.get(0);
 		File spriteDir = new File(args.get(1));
 
