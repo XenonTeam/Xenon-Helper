@@ -13,127 +13,122 @@ import javax.imageio.ImageIO;
 
 public class SpriteSheetHelper
 {
-	
-	
-	
+
 	public static String run(ArrayList<String> args)
 	{
-		
-		if(args.size() > 2)
+
+		if (args.size() > 2)
 		{
 			return "More then three arguments given!";
 		}
-		
-		if(args.size() < 2)
+
+		if (args.size() < 2)
 		{
 			return "Not enough argument given!";
 		}
-		
+
 		String outName = args.get(0);
 		File spriteDir = new File(args.get(1));
-		
-		if(!spriteDir.exists())
+
+		if (!spriteDir.exists())
 		{
 			return "Invalid path given!";
 		}
-		if(!spriteDir.isDirectory())
+		if (!spriteDir.isDirectory())
 		{
 			return "Path has to lead to a dirctory!";
 		}
-		
+
 		File[] spriteFiles = spriteDir.listFiles(new FilenameFilter()
 		{
 
 			@Override
 			public boolean accept(File file, String name)
 			{
-				if(name.endsWith(".png"))
+				if (name.endsWith(".png"))
 					return true;
-				
+
 				return false;
 			}
-			
+
 		});
-		
-		if(spriteFiles.length < 1)
+
+		if (spriteFiles.length < 1)
 		{
 			return "No valid sprites found!";
 		}
-		
-		
+
 		BufferedImage[] sprites = new BufferedImage[spriteFiles.length];
-		
+
 		int maxHeight = 0;
 		int width = 0;
-		
+
 		ArrayList<String> lines = new ArrayList<String>();
-		
-		for(int i = 0; i < spriteFiles.length; i++)
+
+		for (int i = 0; i < spriteFiles.length; i++)
 		{
 			try
 			{
 				sprites[i] = ImageIO.read(spriteFiles[i]);
 			} catch (IOException e)
 			{
-				return "Invalid image file found at: " + spriteFiles[i]; 
+				return "Invalid image file found at: " + spriteFiles[i];
 			}
-			
+
 			String line = "S:" + spriteFiles[i].getName().replaceAll(".png", "") + "," + width + ",0," + sprites[i].getWidth() + "," + sprites[i].getHeight();
-			
+
 			lines.add(line);
-			
+
 			width += sprites[i].getWidth();
-			
-			if(sprites[i].getHeight() > maxHeight)
+
+			if (sprites[i].getHeight() > maxHeight)
 			{
 				maxHeight = sprites[i].getHeight();
 			}
-			
+
 			System.out.println("Loaded sprite from: " + spriteFiles[i]);
 		}
-		
+
 		BufferedImage out = new BufferedImage(width, maxHeight, BufferedImage.TYPE_INT_ARGB);
-		
+
 		Graphics gfx = out.getGraphics();
-		
+
 		width = 0;
-		
-		for(BufferedImage img : sprites)
+
+		for (BufferedImage img : sprites)
 		{
 			gfx.drawImage(img, width, 0, null);
-			
+
 			width += img.getWidth();
 		}
-		
+
 		File spritesOutFile = new File(spriteDir + "/" + outName + ".png.sprites");
-		
+
 		try
 		{
 			ImageIO.write(out, "PNG", new File(spriteDir + "/" + outName + ".png"));
-			
+
 			spritesOutFile.createNewFile();
-			
+
 			BufferedWriter writer = new BufferedWriter(new FileWriter(spritesOutFile));
-			
+
 			writer.write("0.0.2");
 			writer.newLine();
-			
-			for(String s : lines)
+
+			for (String s : lines)
 			{
 				writer.write(s);
 				writer.newLine();
 			}
-			
+
 			writer.close();
-			
+
 		} catch (IOException e)
 		{
 			return "Could not write sprites file!";
 		}
-		
-		
-		
+
 		return "none";
 	}
-	
+
 }
