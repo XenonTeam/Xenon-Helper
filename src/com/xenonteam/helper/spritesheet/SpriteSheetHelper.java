@@ -43,9 +43,7 @@ public class SpriteSheetHelper
 	
 	private static String loadGui(ArrayList<String> args)
 	{
-		
-		
-		return "none";
+		return SpriteSheetGui.loadFromGui();
 	}
 	
 	private static String loadSimple(ArrayList<String> args)

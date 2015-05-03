@@ -7,9 +7,10 @@ import com.xenonteam.helper.spritesheet.SpriteSheetHelper;
 
 public class XenonHelper
 {
-
+	
 	public static void main(String[] args)
 	{
+		
 		if (!(args.length >= 1))
 		{
 			System.out.println("No arguments given!");
